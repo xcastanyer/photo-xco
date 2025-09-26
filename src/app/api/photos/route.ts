@@ -3,7 +3,6 @@ import cloudinary from "@/lib/cloudinary";
 
 export async function GET() {
   try {
-    const folder = "mbr501"; // 👈 cambia por tu carpeta de Cloudinary
 
     const { resources } = await cloudinary.api.resources({
       type: "upload",
@@ -14,14 +13,16 @@ export async function GET() {
 
     // const urls = resources.map((file: any) => file.secure_url);
         // Creamos el array de objetos con id y url
-    const urls = resources.map((res: any, index: number) => ({
+    const urls = resources.map((res: CloudinaryResource, index: number) => ({
       id: index + 1,
       url: cloudinary.url(res.public_id, { width: 1600, crop: "scale" })
     }));
 
  
     return NextResponse.json({ urls });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    let message = "Unknown error";
+    if (error instanceof Error) message = error.message;
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

@@ -13,7 +13,7 @@ export default function HomePage() {
       const data = await res.json();
       console.log(data);
        // Si data.urls ya es [{id, url}] lo dejamos, si no, lo transformamos
-    const photosArray = data.urls?.map((item, index) => {
+    const photosArray = data.urls?.map((item: string, index: number) => {
       // Si item es string, lo convertimos a {id, url}
       if (typeof item === "string") {
         return { id: index + 1, url: item };
