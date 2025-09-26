@@ -25,17 +25,17 @@ export default function HomePage() {
     };
     fetchPhotos();
   }, []);
-const prevPhoto = (e) => {
+const prevPhoto = (e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>) => {
   e.stopPropagation();
   setSelectedPhoto({url:photos[(selectedPhoto.id - 2 + photos.length) % photos.length].url, id:(selectedPhoto.id - 2 + photos.length) % photos.length + 1});  
  
 };
-const nextPhoto = (e) => {
+const nextPhoto = (e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>) => {
   e.stopPropagation();
   setSelectedPhoto({url:photos[(selectedPhoto.id) % photos.length].url, id:(selectedPhoto.id) % photos.length + 1}    );  
  
 };
-const handleWheel = (e) => {
+const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
   e.stopPropagation(); // evita que cierre el lightbox
   if (e.deltaY < 0) {
     // Rueda hacia arriba → anterior foto
