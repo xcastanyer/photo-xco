@@ -69,8 +69,7 @@ const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
           <Image
             src={selectedPhoto.url}
             alt="Selected photo"
-            width={1600}
-            height={1000}
+            fill
             className="object-contain max-h-screen max-w-screen"
           />
            {/* <button onClick={nextPhoto}>Sig</button> */}
@@ -78,19 +77,10 @@ const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
            
         </div>
       ) : (<div>
-           <div style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100%",
-        background: "#151010ff",
-        padding: "2rem",
-        textAlign: "center",
-        boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
-      }}>
+           <div className="fixed top-0 left-0 w-full bg-[#151010] p-4 sm:p-8 text-center shadow-md z-10">
         Xco Photography
       </div>
-        <div className="grid grid-cols-3 md:grid-cols-3 gap-4 p-6 border border-gray-700 rounded-lg" style={{ marginTop: "100px", padding: "1rem" }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-4" style={{ marginTop: "100px", padding: "1rem" }}>
           {photos.map((photo) => (
             <Image
               key={photo.id}
