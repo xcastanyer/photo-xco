@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState ,useRef} from "react";
 
 type Photo = {
   id: number;
@@ -10,6 +10,7 @@ type Photo = {
 export default function HomePage() {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [selectedPhoto, setSelectedPhoto] = useState<Photo>({ url: "", id: 0 });
+  const scrollPosition = useRef(0);
 
   useEffect(() => {
     const fetchPhotos = async () => {
@@ -46,12 +47,22 @@ const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
     nextPhoto(e);
   }
 };
+  const openPhoto = (photo: Photo) => {
+    // Guardar la posición actual antes de abrir
+    scrollPosition.current = window.scrollY;
+    setSelectedPhoto(photo);
+  };
+    const closePhoto = () => {
+    setSelectedPhoto({ url: "", id: 0 });
+    // Restaurar la posición del scroll
+    window.scrollTo(0, scrollPosition.current);
+  };
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
       {selectedPhoto.url ? (
         <div
           className="fixed inset-0 bg-black flex items-center justify-center cursor-pointer"
-          onClick={() => setSelectedPhoto({url:"", id:0})}
+          onClick={closePhoto}
           onWheel={handleWheel}
         >
            {/* <button onClick={prevPhoto}>Previo</button> */}
@@ -88,7 +99,7 @@ const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
               width={400}
               height={300}
               className="object-cover rounded-xl cursor-pointer hover:opacity-80 transition border-5 border-gray-700"
-              onClick={() => setSelectedPhoto({url:photo.url, id:photo.id})}
+              onClick={() => openPhoto(photo)}
             />
           ))}
         </div>
