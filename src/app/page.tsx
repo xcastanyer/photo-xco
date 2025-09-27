@@ -21,6 +21,7 @@ export default function HomePage() {
     };
     fetchPhotos();
   }, []);
+  
 const prevPhoto = (e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>) => {
    e.stopPropagation();
   const newIndex = (selectedPhoto.id - 2 + photos.length) % photos.length;
