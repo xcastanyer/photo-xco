@@ -38,6 +38,7 @@ const nextPhoto = (e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>) => {
     id: newIndex + 1,
   });
 };
+
 const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
   e.stopPropagation(); // evita que cierre el lightbox
   if (e.deltaY < 0) {
@@ -70,7 +71,8 @@ const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
           <Image
             src={selectedPhoto.url}
             alt="Selected photo"
-            fill
+            width={1600}
+            height={1000}
             className="object-contain max-h-screen max-w-screen"
           />
            {/* <button onClick={nextPhoto}>Sig</button> */}
@@ -78,10 +80,23 @@ const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
            
         </div>
       ) : (<div>
-           <div className="fixed top-0 left-0 w-full bg-[#151010] p-4 sm:p-8 text-center shadow-md z-10">
+           <div style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        background: "#151010ff",
+        padding: "2rem",
+        textAlign: "center",
+        boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+        fontFamily: "Arial, sans-serif",
+        fontSize: "1.5rem",
+        color: "white",
+        zIndex: 1000,
+      }}>
         Xco Photography
       </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-4" style={{ marginTop: "100px", padding: "1rem" }}>
+        <div className="grid grid-cols-3 md:grid-cols-3 gap-4 p-6 border border-gray-700 rounded-lg" style={{ marginTop: "100px", padding: "1rem" }}>
           {photos.map((photo) => (
             <Image
               key={photo.id}
