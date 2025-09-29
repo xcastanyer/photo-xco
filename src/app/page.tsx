@@ -38,6 +38,7 @@ const nextPhoto = (e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>) => {
     id: newIndex + 1,
   });
 };
+
 const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
   e.stopPropagation(); // evita que cierre el lightbox
   if (e.deltaY < 0) {
@@ -87,7 +88,11 @@ const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
         background: "#151010ff",
         padding: "2rem",
         textAlign: "center",
-        boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
+        boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+        fontFamily: "Arial, sans-serif",
+        fontSize: "1.5rem",
+        color: "white",
+        zIndex: 1000,
       }}>
         Xco Photography
       </div>
