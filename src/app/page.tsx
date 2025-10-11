@@ -32,6 +32,25 @@ export default function HomePage() {
     fetchPhotos();
   }, []);
 
+  const touchStartY = useRef(0);
+const touchEndY = useRef(0);
+
+const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+  touchStartY.current = e.touches[0].clientY;
+};
+
+const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+  touchEndY.current = e.touches[0].clientY;
+};
+
+const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+  const deltaY = touchStartY.current - touchEndY.current;
+  if (Math.abs(deltaY) > 50) {
+    if (deltaY > 0) nextPhoto(e); // desliza hacia arriba → siguiente foto
+    else prevPhoto(e);             // desliza hacia abajo → foto anterior
+  }
+};
+
   const prevPhoto = (e: React.MouseEvent) => {
     e.stopPropagation();
     const newIndex = (selectedPhoto.id - 2 + photos.length) % photos.length;
@@ -69,6 +88,9 @@ export default function HomePage() {
             className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center cursor-pointer z-50 p-2"
             onClick={closePhoto}
             onWheel={handleWheel}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
