@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useEffect, useState, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion"; // 👈 Importa esto
+import { motion, AnimatePresence } from "framer-motion";
 import FullscreenToggle from "./FullscreenToggle";
 
 type Photo = {
@@ -14,19 +14,15 @@ export default function HomePage() {
   const [selectedPhoto, setSelectedPhoto] = useState<Photo>({ url: "", id: 0 });
   const scrollPosition = useRef(0);
 
-
-  // 👉 Ocultar scroll al abrir imagen
+  // Ocultar scroll al abrir imagen
   useEffect(() => {
-    if (selectedPhoto.url) {
-      document.body.style.overflowY = "hidden";
-    } else {
-      document.body.style.overflowY = "auto";
-    }
+    document.body.style.overflowY = selectedPhoto.url ? "hidden" : "auto";
     return () => {
       document.body.style.overflowY = "auto";
     };
   }, [selectedPhoto]);
 
+  // Cargar fotos
   useEffect(() => {
     const fetchPhotos = async () => {
       const res = await fetch("/api/photos");
@@ -35,12 +31,14 @@ export default function HomePage() {
     };
     fetchPhotos();
   }, []);
-  const prevPhoto = (e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>) => {
+
+  const prevPhoto = (e: React.MouseEvent) => {
     e.stopPropagation();
     const newIndex = (selectedPhoto.id - 2 + photos.length) % photos.length;
     setSelectedPhoto({ url: photos[newIndex].url, id: newIndex + 1 });
   };
-  const nextPhoto = (e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>) => {
+
+  const nextPhoto = (e: React.MouseEvent) => {
     e.stopPropagation();
     const newIndex = selectedPhoto.id % photos.length;
     setSelectedPhoto({ url: photos[newIndex].url, id: newIndex + 1 });
@@ -56,37 +54,39 @@ export default function HomePage() {
     scrollPosition.current = window.scrollY;
     setSelectedPhoto(photo);
   };
+
   const closePhoto = () => {
     setSelectedPhoto({ url: "", id: 0 });
     window.scrollTo(0, scrollPosition.current);
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen overflow-hidden">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white overflow-hidden">
       <AnimatePresence>
         {selectedPhoto.url && (
           <motion.div
             key="lightbox"
-            className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center cursor-pointer z-50"
+            className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center cursor-pointer z-50 p-2"
             onClick={closePhoto}
             onWheel={handleWheel}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
           >
             <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
+              initial={{ scale: 0.85, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="max-w-full max-h-full flex justify-center items-center"
             >
               <Image
                 src={selectedPhoto.url}
                 alt="Selected photo"
                 width={1600}
                 height={1000}
-                className="object-contain max-h-screen max-w-screen rounded-xl shadow-2xl"
+                className="object-contain rounded-2xl shadow-2xl max-h-[90vh] max-w-[95vw]"
               />
             </motion.div>
           </motion.div>
@@ -94,33 +94,21 @@ export default function HomePage() {
       </AnimatePresence>
 
       {!selectedPhoto.url && (
-        <div>
-          <div
-            style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              width: "100%",
-              background: "#000000ff",
-              padding: "1rem",
-              textAlign: "center",
-              boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-              fontFamily: "Arial, sans-serif",
-              fontSize: "1.5rem",
-              color: "white",
-              zIndex: 1000,
-            }}
-          >
-            Xco Photography
-            <div style={{ textAlign: "right" }}>
-              <FullscreenToggle />
+        <div className="w-full">
+          {/* Header fijo */}
+          <div className="fixed top-0 left-0 w-full bg-black bg-opacity-95 px-4 sm:px-6 py-2 sm:py-3 text-center shadow-md z-50">
+            <div className="flex justify-between items-center">
+              <h1 className="text-lg sm:text-xl md:text-2xl font-semibold tracking-wide">
+                Xco Photography
+              </h1>
+              <div className="scale-90 sm:scale-100">
+                <FullscreenToggle />
+              </div>
             </div>
           </div>
 
-          <div
-            className="grid grid-cols-3 md:grid-cols-3 gap-4 p-6 border-gray-700 rounded-lg"
-            style={{ marginTop: "50px", padding: "3rem" }}
-          >
+          {/* Galería */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 px-3 sm:px-6 py-20 sm:py-24">
             {photos.map((photo) => (
               <div
                 key={photo.id}
@@ -131,7 +119,7 @@ export default function HomePage() {
                   alt="Photo"
                   width={600}
                   height={500}
-                  className="object-contain rounded-xl cursor-pointer hover:opacity-30 transition border-4 border-indigo-500 shadow-lg m-4 p-4"
+                  className="object-cover w-full h-full rounded-xl cursor-pointer hover:opacity-70 transition-all duration-300 border border-indigo-500 sm:border-2 shadow-md sm:shadow-lg"
                   onClick={() => openPhoto(photo)}
                 />
               </div>
