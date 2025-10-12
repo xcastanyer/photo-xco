@@ -84,9 +84,8 @@ export default function HomePage() {
     setSelectedPhoto({ url: "", id: 0 });
     window.scrollTo(0, scrollPosition.current);
   };
-
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen overflow-hidden">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white overflow-hidden">
       <AnimatePresence>
         {selectedPhoto.url && (
           <motion.div
@@ -100,20 +99,21 @@ export default function HomePage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
           >
             <motion.div
               initial={{ scale: 0.85, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.85, opacity: 0 }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="max-w-full max-h-full flex justify-center items-center"
             >
               <Image
                 src={selectedPhoto.url}
                 alt="Selected photo"
                 width={1600}
                 height={1000}
-                className="object-contain max-h-screen max-w-screen rounded-xl shadow-2xl"
+                className="object-contain rounded-2xl shadow-2xl max-h-[90vh] max-w-[95vw]"
               />
             </motion.div>
           </motion.div>
@@ -121,23 +121,21 @@ export default function HomePage() {
       </AnimatePresence>
 
       {!selectedPhoto.url && (
-        <div>
+        <div className="w-full">
           {/* Header fijo */}
-          <div
-            className="fixed top-0 left-0 w-full bg-black text-white shadow-md p-4 flex flex-col md:flex-row justify-between items-center z-50"
-          >
-            <div className="text-center text-xl md:text-2xl font-semibold tracking-wide">
-              Xco Photography
-            </div>
-            <div className="mt-2 md:mt-0">
-              <FullscreenToggle />
+          <div className="fixed top-0 left-0 w-full bg-black bg-opacity-95 px-4 sm:px-6 py-2 sm:py-3 text-center shadow-md z-50">
+            <div className="flex justify-between items-center">
+              <h1 className="text-lg sm:text-xl md:text-2xl font-semibold tracking-wide">
+                Xco Photography
+              </h1>
+              <div className="scale-90 sm:scale-100">
+                <FullscreenToggle />
+              </div>
             </div>
           </div>
 
-          {/* Galería de fotos */}
-          <div
-            className="grid grid-cols-2 sm:grid-cols-3 gap-4 p-4 md:p-10 border-gray-700 rounded-lg mt-20"
-          >
+          {/* Galería */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 px-3 sm:px-6 py-20 sm:py-24">
             {photos.map((photo) => (
               <div
                 key={photo.id}
@@ -148,7 +146,7 @@ export default function HomePage() {
                   alt="Photo"
                   width={600}
                   height={500}
-                  className="object-contain rounded-xl cursor-pointer hover:opacity-40 transition border-4 border-indigo-500 shadow-lg m-2 p-2"
+                  className="object-cover w-full h-full rounded-xl cursor-pointer hover:opacity-70 transition-all duration-300 border border-indigo-500 sm:border-2 shadow-md sm:shadow-lg"
                   onClick={() => openPhoto(photo)}
                 />
               </div>
