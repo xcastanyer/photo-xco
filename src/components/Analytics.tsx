@@ -1,4 +1,3 @@
-// src/components/Analytics.tsx
 'use client';
 
 import { usePathname, useSearchParams } from 'next/navigation';
@@ -8,6 +7,7 @@ import * as gtag from '@/lib/gtag';
 export default function Analytics() {
   const [isClient, setIsClient] = useState(false);
 
+  // Activamos solo en cliente
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -16,10 +16,15 @@ export default function Analytics() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    if (!isClient) return; // solo ejecutar en cliente
-    const url = pathname + searchParams.toString();
+    if (!isClient) return; // nunca ejecutar en SSR
+
+    // Construimos la URL completa con query string si existe
+    const queryString = searchParams.toString();
+    const url = pathname + (queryString ? '?' + queryString : '');
+
+    // Llamada a Google Analytics
     gtag.pageview(url);
   }, [isClient, pathname, searchParams]);
 
-  return null;
+  return null; // componente invisible
 }
