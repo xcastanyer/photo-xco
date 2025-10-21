@@ -1,4 +1,10 @@
 // src/lib/gtag.ts
+declare global {
+  interface Window {
+    gtag: (...args: any[]) => void;
+  }
+}
+
 export const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GA_ID || "";
 
 // Registrar vistas de página
