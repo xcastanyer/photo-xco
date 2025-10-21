@@ -1,5 +1,4 @@
 // src/lib/gtag.ts
-'use client';
 
 declare global {
   interface Window {
