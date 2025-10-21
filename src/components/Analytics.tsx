@@ -1,30 +1,28 @@
 'use client';
 
-import { usePathname, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
 import * as gtag from '@/lib/gtag';
 
 export default function Analytics() {
-  const [isClient, setIsClient] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  // Activamos solo en cliente
   useEffect(() => {
-    setIsClient(true);
+    setMounted(true);
   }, []);
 
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    if (!isClient) return; // nunca ejecutar en SSR
+    if (!mounted) return; // aseguramos ejecución solo en cliente
 
-    // Construimos la URL completa con query string si existe
-    const queryString = searchParams.toString();
+    if (!pathname) return; // Next.js puede dar undefined en 404 automática
+
+    const queryString = searchParams?.toString();
     const url = pathname + (queryString ? '?' + queryString : '');
-
-    // Llamada a Google Analytics
     gtag.pageview(url);
-  }, [isClient, pathname, searchParams]);
+  }, [mounted, pathname, searchParams]);
 
-  return null; // componente invisible
+  return null;
 }
