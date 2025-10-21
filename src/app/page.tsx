@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import FullscreenToggle from "./FullscreenToggle";
+import * as gtag from "@/lib/gtag";
 
 type Photo = {
   id: number;
@@ -78,6 +79,11 @@ export default function HomePage() {
   const openPhoto = (photo: Photo) => {
     scrollPosition.current = window.scrollY;
     setSelectedPhoto(photo);
+     gtag.event({
+      action: "photo_open",
+      category: "Gallery",
+      label: photo.url,
+    });
   };
 
   const closePhoto = () => {
