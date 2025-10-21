@@ -3,6 +3,8 @@ import "./globals.css";
 import { ReactNode } from "react";
 import Script from "next/script";
 import { GA_TRACKING_ID } from "@/lib/gtag";
+
+import { Suspense } from 'react';
 import Analytics from "@/components/Analytics";
 
 export const metadata = {
@@ -38,7 +40,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           </>
         )}
       </head>
-      <body className="bg-black text-white">{children}<Analytics /></body>
+      <body className="bg-black text-white">{children}
+        <Suspense fallback={null}>
+          <Analytics />
+        </Suspense>
+        </body>
     </html>
   );
 }
